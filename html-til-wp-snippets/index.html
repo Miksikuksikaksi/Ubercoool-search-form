@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Übercoooooolio</title>
+	<meta charset="UTF-8">
+	<link href='http://fonts.googleapis.com/css?family=Crimson+Text' rel='stylesheet' type='text/css'>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link href="prism.css" rel="stylesheet" />
+</head>
+<body>
+	
+<div class="wrap">
+	<div id="wrapper">
+			
+			<header>
+			    <div class="mh-top-menu">
+			    	<div class="menu-mh-header-nav-container"><ul id="menu-mh-header-nav" class="menu"><li class="menu-item"><a href="index.html">Blogbelogboggen</a></li>
+</ul></div>			    </div>
+			    <h3 class="mh-top-quote">'The enemy of art is the <br> absence of limitations.'</h3>
+			</header>
+	
+	<section>
+		
+		<div class="mh-post">
+		    <h3 class="mh-entry-title"><a href="single.html">Minimalistisk search-form</a></h3>
+		    <span class="mh-entry-author"><a href="#" title="Posts by michael" rel="author">Michael</a></span>
+		    <span class="mh-entry-date">2014/09/02</span>
+		    <div class="mh-entry-content">
+		    	<p>Find din header.php i dit tema (fx Ubercool). Og ca. på linje 21-22 lige efter:
+		    	</p>
+		    	
+		    	<pre><code class="language-markup">
+&lt;div class="mh-top-menu"&gt;
+	&lt;?php wp_nav_menu(array('menu' => 'Ubercoool' )); ?&gt;
+&lt;/div&gt;
+			    </code></pre>
+			    
+			    <p>... indsætter du:</p>
+			    	<pre><code class="language-markup">
+&lt;div class="search-toggle"&gt;
+	&lt;i class="fa fa-search">&lt;/i&gt;
+&lt;/div&gt;
+
+					</code></pre>
+		    	<p>Det er en reference til et smart vektor-ikon, som <a href="fontawesome.io" target="_blank">fontawesome.io</a> har lavet. Font-ikonet gemmer vi inde i en div med class-navnet search-toggle, så vi senere kan bruge det til at vise og skjule søgefeltet. Men for at kunne se font-ikonet, er vi nødt til at gøre to ting: Først må vi fortælle Wordpress, at den skal hente fontawesome. Så i jeres function.php skriver I: </p>
+			    
+			    <pre><code class="language-php">
+function ubercool_scripts() {
+        wp_enqueue_style( 'ubercool-fontawesome', 'http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' );
+}
+add_action( 'wp_enqueue_scripts', 'ubercool_scripts' );
+			    </code></pre>
+			    
+			    <p>Test lige en gang. Gem alle filer og reload i din browser. Kan du se det lille søge-ikon? Hvis ikke, hent mig i næste lektion. Men hvis det virker, så lad os fortsætte. Nu skal vi så indsætte selve søge-feltet. Worpress kommer med ready-to-go søgeboks, der ovenikøbet udfører alt søgearbejdet for dig. Du kan nøjes med meget lidt kode, men vi indsætter funktionen med lidt div-spaghetti rundt om, så vi senere kan få søgefeltet til at se funky ud - lige før lukke-header-tagget i din header.php:</p>
+			    
+			    <pre><code class="language-markup">
+&lt;div id="search-container" class="search-box-wrapper clear"&gt;
+    &lt;div class="search-box clear"&gt;
+    	&lt;?php get_search_form(); ?&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+				</code></pre>
+				
+				<p>Indsæt nu hele den her stump kode i din css fil, dér hvor du synes, det giver mening. Koden fortæller browseren, hvordan både din lille søgeknap og søgefeltet skal se ud. Fortvivl ikke, når dit søgefelt forsvinder. Det er meningen (et dukker op igen, når vi om lidt skriver lidt jQuery). Men først css-delen:</p>
+				
+				
+				<pre><code class="language-css">
+.search-toggle {
+	width: 40px;
+	font-size: 30px;
+	color: white;
+	padding: 10px;
+	text-align: center;
+	background: rgba(150,152,159,0.9);
+	margin-bottom: 20px;
+	margin-right: 20px;
+	cursor: pointer;
+	float: left;
+	-webkit-transition-property:color, background; 
+	-webkit-transition-duration: 0.3s, 0.3s; 
+	-webkit-transition-timing-function: linear, ease-in;
+	-moz-box-shadow:    inset 1px 1px 2px rgba(20,40,60,0.4);
+    -webkit-box-shadow: inset 1px 1px 2px rgba(20,40,60,0.4);
+    box-shadow:         inset 1px 1px 2px rgba(20,40,60,0.4);
+}
+.search-toggle:hover, search-toggle.active {
+	background: rgb(101,216,250);
+}
+input[type="search"] {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 20px;
+}
+input[type="search"], input[type="text"] {
+	padding: 10px;
+}
+.search-box-wrapper {
+	width: 100%;
+    display: none;
+}
+.search-box {
+    padding: 10px;
+    background: rgba(150,152,159,0.9);
+    -moz-box-shadow:    inset 1px 1px 2px rgba(20,40,60,0.4);
+    -webkit-box-shadow: inset 1px 1px 2px rgba(20,40,60,0.4);
+    box-shadow:         inset 1px 1px 2px rgba(20,40,60,0.4);
+}
+.search-box, .search-field {
+    font-size: 20px;
+    font-size: 1.3rem;
+    border: 0;
+    color: white;
+}
+.error404 .search-submit,
+.search .search-submit,
+.search-box .search-submit { 
+    display: none; 
+}				</code></pre>
+				
+				<p>I jeres function.php, der ligger i samme mappe som jeres index.php, skal I indsætte den her stump kode lige under jeres wp_enqueue_style:</p>
+				
+				<pre><code class="language-php">
+wp_enqueue_script( 'ubercool-search', get_template_directory_uri() . '/js/toggle-search.js', array('jquery'), '20140906', true );
+				</code></pre>
+				
+				<p>Super. Nu ved Wordpress, at den skal hente et jQuery-script, der hjælper med at vise og skjule jeres søge-felt. Så må vi hellere skrive den jQuery-fil. Hvis I ikke allerede har en mappe, der hedder 'js' i jeres tema-mappe, så opret en. I den mappe opretter I en fil, der skal hedde 'toggle-search.js'. Og i den fil indsætter I koden her:</p>
+				
+				<pre><code class="language-javascript">
+jQuery(document).ready(function($){
+    $(".search-toggle").click(function(){
+        $("#search-container").slideToggle('slow', function(){
+            $('.search-toggle').toggleClass('active');
+        });
+        return false;
+    });
+});
+				</code></pre>
+				
+				<p>Det var dét. Nu skulle alt virke, så vend tilbage til jeres browser og reload, og voila! Når I besøger siden, kan man se søge-ikonet, men søge-feltet dukker først op, når vi klikker på søgefeltet.</p>
+
+		    </div><!-- ends mh-entry-content -->
+		</div><!-- ends mh-post -->
+		
+		<div class="mh-post">
+		    <h3 class="mh-entry-title"><a href="single.html">Nyt site der forestiller responsive web</a></h3>
+		    <span class="mh-entry-author"><a href="#" title="Posts by michael" rel="author">Michael</a></span>
+		    <span class="mh-entry-date">2012/08/26</span>
+		    <div class="mh-entry-content">
+		    	<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo [...]</p>
+		    </div><!-- ends mh-entry-content -->
+		</div><!-- ends mh-post -->
+		
+		<div class="mh-post">
+		    <h3 class="mh-entry-title"><a href="single.html">Nyt site der forestiller responsive web</a></h3>
+		    <span class="mh-entry-author"><a href="#" title="Posts by michael" rel="author">Michael</a></span>
+		    <span class="mh-entry-date">2012/08/26</span>
+		    <div class="mh-entry-content">
+		    	<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo [...]</p>
+		    </div><!-- ends mh-entry-content -->
+		</div><!-- ends mh-post -->
+		
+		<div class="mh-post">
+		    <h3 class="mh-entry-title"><a href="single.html">Nyt site der forestiller responsive web</a></h3>
+		    <span class="mh-entry-author"><a href="#" title="Posts by michael" rel="author">Michael</a></span>
+		    <span class="mh-entry-date">2012/08/26</span>
+		    <div class="mh-entry-content">
+		    	<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo [...]</p>
+		    </div><!-- ends mh-entry-content -->
+		</div><!-- ends mh-post -->
+		
+	</section>
+
+
+	</div><!-- ends wrapper -->
+	<div class="push"></div><!-- keeps footer at bottom -->
+</div><!-- ends wrap -->
+	
+	<script src="prism.js"></script>
+
+	<div class="footer">
+		<div id="footer-wrap">
+			<span class="mh-footer-copyright">Übercool wp-tema &copy; Michael Hanson 2012</span>
+		</div><!-- ends footer-wrap -->
+	</div><!-- ends footer -->
+
+</body>
+</html>
